@@ -1,0 +1,35 @@
+.search-btn{
+    display: flex;
+}
+.search-btn button{
+    background-color: cadetblue;
+    color: white;
+}
+/* .search_page{
+    background-color: #0e11a8;
+    color: #fff;
+} */
+.innovation-dev{
+    margin-top: 30px;
+}
+.username{
+  
+}
+.about-carbon p,.innovation-dev p{
+    font-size: 15px;
+}
+.search-cnt{
+    background-image: url(../../assets/img/Search-bg.jpg);
+    background-repeat: no-repeat;
+    margin-bottom: 40px;
+}
+.serach-car{
+    margin: 90px 0px;
+}
+.serach-car h3{
+    color: white;
+    font-family: emoji;
+}
+.about-carbon h3,.innovation-dev h3{
+    color: brown;
+}

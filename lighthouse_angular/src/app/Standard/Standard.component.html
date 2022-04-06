@@ -1,0 +1,42 @@
+<div class="row standardpage">
+  <div class="order-nav row">
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 standardtit">
+      <h3>ORDER INQUIRY</h3>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 greenModeLink">
+      <a [routerLink]="['/Green_Webpage']" class="greenMode_link">Green Mode</a>
+    </div>
+    <div class="user-tit">
+      <p>welcome : <span>standard page</span></p>
+    </div>
+  </div>
+  <div class="row cardetails">
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 left-side">
+      <p>Welcome to standard Page</p>
+      <div class="serach-car">
+        <h3>Search for Vehicle</h3>
+        <form>
+          
+          <div class="search-btn">
+          <!-- <label>Search Vehicle Type </label>  -->
+            <input #id type="text" placeholder="Search vehicle type">
+            <input #year type="number" placeholder="Search year"><br>
+            <button (click)="search(id.value,year.value)">Search</button>
+          </div>
+        </form>
+      </div>
+      <div class="test-btn">
+        <div id="wcb" class="carbonbadge"></div>
+        <script src="src/assets/js/b.js"> </script>
+      </div>
+    </div>
+    <!-- *ngIf="showstandardImage" -->
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+      <div class="car_image" >
+          <img src="../../assets/img/StandardCar-image.png">
+      </div>
+    </div>
+  </div>
+</div>
+
+

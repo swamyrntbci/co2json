@@ -1,0 +1,82 @@
+.car-img{
+    font-size: 2.8px;
+    text-align: center;
+    background: black;
+    border: 4px solid black;
+    color: white;
+}
+.card{
+    border: none;
+}
+.test-btn{
+    text-align: center;
+}
+.test-btn button{
+    background: darkcyan;
+    color: white;
+    margin-bottom: 20px;
+}
+.car_image img{
+    width: 100%;
+}
+.standardpage,.testrow,.order-nav{
+    margin: 0px;
+}
+.test-btn{
+    text-align: center;
+    margin-top: 20px;
+}
+.test-btn button{
+    background: #627593;
+    color: white;
+    margin-bottom: 20px;
+}
+.order-nav{
+    background-color: #8c8c8d;
+}
+.standardtit h3{
+    color: white;
+    font-size: 17px;
+    float: right;
+    padding: 20px 1px;
+}
+.greenModeLink{
+    padding: 20px 1px;
+}
+.greenModeLink a{
+    float: right;
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+    background: black;
+    padding: 4px 15px;
+}
+.user-tit p{
+    color: white;
+}
+.cardetails{
+    background: #f2f2f2;
+    margin: 0px;
+}
+.left-side{
+    padding-top: 50px;
+}
+.left-side p{
+    border: 1px solid black;
+    padding: 7px;
+    background: darkgray;
+}
+.search-btn input{
+    width: 52%;
+    margin-bottom: 15px;
+}
+input[type="number" i] {
+    padding: 8px;
+}
+.car_image{
+    padding-top: 30px;
+}
+.search-btn button{
+    background: black;
+    color: white;
+}
