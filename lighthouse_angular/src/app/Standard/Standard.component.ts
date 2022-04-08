@@ -15,14 +15,22 @@ export class StandardComponent implements OnInit {
 
   ngOnInit(): void {
   //this.testCo2 ();
-  const wcU = encodeURIComponent(window.location.href);
+  let url :any = new URL(window.location.href);
 
-  //if(sessionStorage.getItem('wcb_'+wcU) != null){
+  let wcU :any = encodeURIComponent(url);
 
-    let cachedResponse = sessionStorage.getItem('wcb_'+wcU)!;
-   var obj = JSON.parse(cachedResponse);
- // document.getElementById("wcb")!.innerHTML = obj.co2 + 'g of CO<sub>2</sub>/view';
-  //}
+  if( window.localStorage )
+       {
+       if(localStorage.getItem("wcb_" + wcU)) {
+         if( !localStorage.getItem('firstLoad') )
+         {
+           localStorage['firstLoad'] = true;
+           window.location.reload();
+         }
+         else
+           localStorage.removeItem('firstLoad');
+       }
+       }
   }
   vehicleName : string = '';
   public showstandardImage  = false;
