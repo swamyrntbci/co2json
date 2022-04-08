@@ -13,8 +13,17 @@ export class GreenComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-  //this.testCo2 ();
 
+ if( window.localStorage )
+     {
+       if( !localStorage.getItem('firstLoad') )
+       {
+         localStorage['firstLoad'] = true;
+         window.location.reload();
+       }
+       else
+         localStorage.removeItem('firstLoad');
+     }
   }
   vehicle : any;
     co2g : any = 0;
