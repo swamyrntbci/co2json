@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  ${SIA}-app:
+    image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_APP}:${CI_PIPELINE_ID}
+    networks:
+      - _NETWORK_
+      - traefik-net
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.port=80"
+        - "traefik.frontend.rule=Host:${URL_APP}"
+        - "traefik.docker.network=traefik-net"
+  ${SIA}-api:
+    image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_API}:${CI_PIPELINE_ID}
+    environment:
+      - HTTP_PROXY=${HTTP_PROXY}
+      - NODE_ENV=${NODE_ENV}
+      - NO_PROXY=${NO_PROXY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
+      - USE_PROXY=${USE_PROXY}
+      - PROXY_USR=${PROXY_USR}
+      - PROXY_PWD=${PROXY_PWD}
+    labels:
+      - "env=${loggingEnv}"
+      - "irn=IRN-71850"
+      - "sia=esc"
+      - "commit_hash=${COMMIT_HASH}"
+    logging:
+      driver: gelf
+      options:
+        gelf-address: ${GELF_ADDRESS}
+        tag: "esc-${target}"
+        labels: "sia,irn,env"
+    healthcheck:
+      disable: false
+    networks:
+      - _NETWORK_
+      - traefik-net
+    deploy:
+      replicas: 1
+      labels:
+       - "traefik.port=9000"
+       - "traefik.frontend.rule=Host:${URL_API}"
+       - "traefik.docker.network=traefik-net"
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+networks:
+  traefik-net:
+    external:
+      name: traefik-net
+  _NETWORK_:
+    external:
+      name: _NETWORK_

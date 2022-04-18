@@ -21,7 +21,7 @@
     "express": "4.17.1",
     "helmet": "3.23.3",
     "lighthouse": "^9.3.1",
-    "lodash": "4.17.20",
+    "lodash": "^4.17.21",
     "moment": "2.29.1",
     "nodemon": "^2.0.15",
     "os": "0.1.1",

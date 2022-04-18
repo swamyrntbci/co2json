@@ -1,0 +1,147 @@
+# Déclaration de variables globales
+variables:
+  SIA: esc
+  DOCKER_IMAGE_APP: esc/app
+  DOCKER_IMAGE_API: esc/api
+  DEV_URL_APP: "${SIA}-app.dok-dev.intra.renault.fr"
+  DEV_URL_API: "${SIA}-api.dok-dev.intra.renault.fr"
+  RE7_URL: "${SIA}.dok-re7.intra.renault.fr"
+  OPE_URL: "${SIA}.dok.intra.renault.fr"
+  INTRA_REGISTRY: "dok-dtrope.intra.renault.fr:3443"
+  INTRA_DEV_REGISTRY: "s2144tds.mc2.renault.fr:5000"
+  AWS_DOCKER_REGISTRY: "dtr-dev.dt.renault.com"
+  INTRA_PROXY: http://awmcn02:Awmcnqa1@cosmos-vip.intra.renault.fr:3128
+  INTRA_NO_PROXY: mge.intra.renault.fr
+  INTRA_GELF: udp://10.252.87.113:12201
+
+
+# Déclaration de templates qui seront réutilisés au niveau des différents Jobs
+.tags_propagate: &tags_propagate
+  allow_failure: false
+  when: on_success
+  tags:
+    - intra
+    - propagate
+
+.tags_deploy_dev: &tags_deploy_dev
+  when: manual
+  tags:
+    - intra
+    - deploy
+
+.tags_deploy: &tags_deploy
+  when: manual
+  only:
+    - master
+    - v2upgrade
+  tags:
+    - intra
+    - deploy
+
+.tags_build_images: &tags_build_images
+  variables:
+    DOCKER_REGISTRY: ${INTRA_DEV_REGISTRY}
+  tags:
+    - intra
+    - build
+
+.tags_build_in_dev: &tags_build_in_dev
+  variables:
+    PROXY_ADDR: cosmos-vip.intra.renault.fr:3128
+  tags:
+    - intra
+    - build
+    - dev
+
+# Déclaration des stages dans l'ordre d'exécution
+stages:
+  - build
+  - build_image
+  - deploy_dev
+
+# Début de description des différents jobs
+build_deliverable:
+  stage: build
+  image: node:10-alpine
+  script:
+    - rm -rf carbon-api-node/node_modules
+    - cd carbon-api-node && npm i --production  
+  artifacts:
+    paths:
+      - ./carbon-api-node/node_modules
+  <<: *tags_build_in_dev
+
+build_image_app:
+  stage: build_image
+  script:
+    - docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE_APP}:${CI_PIPELINE_ID} --build-arg HTTP_PROXY=${https_proxy} --build-arg HTTPS_PROXY=${https_proxy} --build-arg http_proxy=${https_proxy} --build-arg https_proxy=${https_proxy} --build-arg TAG_VERSION="1.0.0." --build-arg TAG_BUILD=${CI_PIPELINE_ID} --build-arg TAG_COMMIT=${CI_COMMIT_SHA} lighthouse_angular/
+    - docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE_APP}:${CI_PIPELINE_ID}
+  <<: *tags_build_images
+
+build_image_api:
+  stage: build_image
+  script:
+    - docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE_API}:${CI_PIPELINE_ID} --build-arg TAG_VERSION="1.0.0." --build-arg TAG_BUILD=${CI_PIPELINE_ID} --build-arg TAG_COMMIT=${CI_COMMIT_SHA} carbon-api-node/
+    - docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE_API}:${CI_PIPELINE_ID}
+  <<: *tags_build_images
+
+deploy_image_to_dev:
+  variables:
+    URL_APP: ${DEV_URL_APP}
+    URL_API: ${DEV_URL_API}
+    ENV: "DEVELOPEMENT"
+    TARGET: "DEV"
+    DOCKER_REGISTRY: ${INTRA_DEV_REGISTRY}
+    IMAGE_TAG: ${INTRA_DEV_REGISTRY}/${SIA}/${IMAGE_NAME}:${CI_PIPELINE_ID}
+    target: dev
+    loggingEnv: DEVELOPPEMENT
+    GELF_ADDRESS: ${INTRA_GELF}
+    HTTP_PROXY: ${INTRA_PROXY}
+    NO_PROXY: ${INTRA_NO_PROXY}
+    NODE_ENV: development
+    LOG_LEVEL: debug
+    ALLOWED_ORIGIN: "https://${DEV_URL_APP}"
+    USE_PROXY: "true"
+    PROXY_USR: awmcn02
+    PROXY_PWD: Awmcnqa1
+  stage: deploy_dev
+  script:
+    - deployStack --sia=${SIA} --env=dev
+  <<: *tags_deploy_dev
+
+
+
+######################################### SCRIPTS ######################################
+
+.Load_Functions: &Load_Functions |
+  set -x
+
+  # Whereami
+  function whereami() {
+    echo "You start a new runner for your Job"
+    env
+  }
+
+  # Log
+  function log() {
+      dt=$(date +"[%Y/%M/%d %H:%m:%S]")
+      echo "$dt [JOB_ID: ${CI_JOB_ID}] $1"
+  }
+
+  # Release
+  function release() {
+    tag=$1
+    push_on_intra=$2
+    echo "Here you will release your stufff to a docker registry and or a nexus."
+    script/release.sh $tag $push_on_intra
+  }
+
+  # Decrypt
+  function decrypt() {
+    fname=$1
+    openssl des3 -d -salt -in "$fname" -out "${fname%.[^.]*}" -pass env:ENCRYPT_PASS
+  }
+
+#Load this functions at each stages
+before_script:
+  - *Load_Functions

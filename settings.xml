@@ -1,0 +1,42 @@
+<settings>
+    <mirrors>
+        <mirror>
+            <id>renaultMirror</id>
+            <mirrorOf>*</mirrorOf>
+            <name>Renault Mirror</name>
+            <url>http://rnexus.intra.renault.fr/rnexus/content/groups/renault-entry/</url>
+        </mirror>
+    </mirrors>
+    <profiles>
+        <profile>
+            <id>nexus-ope</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>nexus</id>
+                    <url>http://central</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>nexus</id>
+                    <url>http://central</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+</settings>
