@@ -5,7 +5,6 @@ COPY package.json .
 
 COPY node_modules node_modules
 
-
 FROM node:14-alpine
 
 WORKDIR /home/user
@@ -13,13 +12,16 @@ COPY --from=builder /user/src ./
 COPY src src
 COPY lighthouse lighthouse
 COPY healthcheck.js .
-RUN ls -lrt
+COPY app.js .
+COPY .env .
+RUN pwd
 
 # injected at build time
 ARG COMMIT_HASH
 ARG DATE
 ENV BUILD_COMMIT_HASH=$COMMIT_HASH
 ENV BUILD_DATE=$DATE
+
 
 # injected at runtime
 ENV HTTP_PROXY=
@@ -29,8 +31,11 @@ ENV LOG_LEVEL=info
 ENV NO_PROXY=
 ENV PORT=9000
 
-CMD node src
+CMD node app.js
 EXPOSE $PORT
+
+RUN pwd
+RUN ls -lrt
 
 HEALTHCHECK --interval=1m --timeout=3s \
   CMD node healthcheck.js
