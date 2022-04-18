@@ -1,23 +1,18 @@
 FROM node:14-alpine as builder
 
 WORKDIR /user/src
-COPY ./package.json .
+COPY package.json .
 
-COPY ./node_modules /user/src/node_modules
+COPY node_modules node_modules
+
 
 FROM node:14-alpine
 
 WORKDIR /home/user
 COPY --from=builder /user/src ./
-RUN pwd
-RUN ls
-RUN ls /home/user/
-RUN ls /home/user/dist
-COPY ./src src
-COPY ./lighthouse lighthouse
-COPY ./healthcheck.js .
-RUN ls /home/user/
-RUN ls /home/user/dist
+COPY src src
+COPY lighthouse lighthouse
+COPY healthcheck.js .
 
 # injected at build time
 ARG COMMIT_HASH
