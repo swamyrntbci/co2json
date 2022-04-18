@@ -9,7 +9,7 @@ const newRequest = async function (render = true) {
   console.log("wcU" + wcU);
   // Run the API request because there is no cached result available
   if (!isTest) {
-    await fetch("http://localhost:30000/co2/calculate?url=" + wcU, {
+    await fetch("https://esc-api.dok-dev.intra.renault.fr/co2/calculate?url=" + wcU, {
       method: "GET",
       headers: {
         "Content-type": "application/json;charset=UTF-8",

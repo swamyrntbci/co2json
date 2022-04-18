@@ -14,7 +14,7 @@ app.set('port', port);
 app.use(helmet());
 //app.use(cors());
 app.use(cors({
-    origin: 'http://localhost:4200'
+    origin: ['http://localhost:4200', 'https://esc-app.dok-dev.intra.renault.fr']
 }));
 app.use(bodyParser.json({
   limit: '50mb'
