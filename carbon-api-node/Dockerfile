@@ -13,6 +13,7 @@ COPY --from=builder /user/src ./
 COPY src src
 COPY lighthouse lighthouse
 COPY healthcheck.js .
+RUN ls -lrt
 
 # injected at build time
 ARG COMMIT_HASH
