@@ -1,5 +1,6 @@
 const { launch } = require("chrome-launcher");
 const lighthouse = require("lighthouse");
+const puppeteer = require('puppeteer');
 
 const { calculateCo2 } = require("./calculate-co2");
 let chrome = new Object();
@@ -16,10 +17,10 @@ class LightHouseWrapper {
     const runnerResult = await lighthouse(url, options);
     const reportHtml = await runnerResult.report;
     const jsonReport = JSON.parse(reportHtml);
-    co2g = await calculateCo2(jsonReport);
+    const result = await calculateCo2(jsonReport);
     await chrome.kill();
 
-    return co2g.toString();
+    return result;
   }
 }
 LightHouseWrapper = new LightHouseWrapper();
