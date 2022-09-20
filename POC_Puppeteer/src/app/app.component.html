@@ -1,2 +1,14 @@
-
-<router-outlet></router-outlet>
+<div class="row standardpage">
+    <div class="order-nav row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 standardtit">
+        <h3>ORDER INQUIRY</h3>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 greenModeLink">
+        <a [routerLink]="['/Green_Webpage']" class="greenMode_link">Green Mode</a>
+      </div>
+      <div class="user-tit">
+        <p>welcome : <span>standard page</span></p>
+      </div>
+    </div>
+    <router-outlet></router-outlet>
+</div>

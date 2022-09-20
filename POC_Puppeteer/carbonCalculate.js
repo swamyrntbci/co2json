@@ -92,8 +92,10 @@ async function wait(time) {
 
 (async () => {
   const urls = [
-    "http://localhost:4200/Standard_Webpage",
-    "http://localhost:4200/Green_Webpage",
+      "https://rntbci.in/",
+      //"https://www.nissan.in/experience-nissan/latest-news.html",
+      //"https://www.nissan.in/contact-us.html",
+      //"https://www.nissan.in/careers.html",
     // "https://www.charsur.com/albums/list",
     // "https://www.charsur.com/songs/list",
     // "https://www.charsur.com/artist/detail",
@@ -127,19 +129,23 @@ async function wait(time) {
     );*/
   }
   await browser_handler.browser.close();
-  const latestFileName = "src/assets/co2/calc-latest.json";
+  let path = 'https://github.com/loucia/co2-json/'
+  const latestFileName = path+"calc-latest.json";
   let data = JSON.stringify(resultCo2);
   //const datetime = moment(new Date()).format("DDMMYYYYHmmss");
   //const oldFileName = `calc-${datetime}.json`;
-  const oldFileName = `calc-old.json`;
-  fs.rename("src/assets/co2/calc-latest.json", oldFileName, (err) => {
+ /* const oldFileName = `calc-old.json`;
+  fs.rename(latestFileName, oldFileName, (err) => {
     if (err) {
       throw err;
     }
     console.log("\nFile Renamed!\n");
     fs.writeFileSync(latestFileName, data, "utf8");
-  });
-
+  });*/
+  if ( fs.existsSync( path ) ) {
+  console.log(data)
+  }
+  fs.writeFileSync(latestFileName, data, "utf8");
   /*const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(url);
