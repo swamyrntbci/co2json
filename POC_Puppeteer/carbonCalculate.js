@@ -1,7 +1,8 @@
 const fs = require("fs");
 const puppeteer = require("puppeteer");
 const { navigation } = require("lighthouse/lighthouse-core/fraggle-rock/api");
-
+const simpleGit = require('simple-git');
+var currentTime = Date.now();
 function totalBytesToCo2(totalBytes, group = "") {
   const bytes = totalBytes * 0.75 + 0.02 * totalBytes * 0.25;
   const energy = bytes * (1.805 / 1073741824);
@@ -108,6 +109,8 @@ async function wait(time) {
   for (let i = 0; i < urls.length; i++) {
     let url = urls[i];
     let page = await browser_handler.browser.newPage();
+    await page.setViewport({width: 1366, height: 768});
+    await page.authenticate({'username':'z035919', 'password': 'india222'});
     await page.goto(url, { waitUntil: "load", timeout: 0 });
     await wait(30000);
     //await page.screenshot({ path: "src/assets/co2/example" + i + ".png", fullPage: true });
@@ -129,8 +132,8 @@ async function wait(time) {
     );*/
   }
   await browser_handler.browser.close();
-  let path = 'https://github.com/loucia/co2-json/'
-  const latestFileName = path+"calc-latest.json";
+  let path = 'https://github.com/swamyrntbci/co2json.git';
+  const latestFileName = "calc-latest.json";
   let data = JSON.stringify(resultCo2);
   //const datetime = moment(new Date()).format("DDMMYYYYHmmss");
   //const oldFileName = `calc-${datetime}.json`;
@@ -142,10 +145,38 @@ async function wait(time) {
     console.log("\nFile Renamed!\n");
     fs.writeFileSync(latestFileName, data, "utf8");
   });*/
-  if ( fs.existsSync( path ) ) {
-  console.log(data)
-  }
+  
   fs.writeFileSync(latestFileName, data, "utf8");
+  if (fs.existsSync(latestFileName)) {
+    /*await simpleGit()
+    .add([latestFileName])
+    .commit('first commit!')
+    .removeRemote('origin')
+    .addRemote('origin',path)
+    .push(['-u', 'origin', 'master'])
+    .then(() => {
+      console.log('finished')
+    })
+    .catch((err) => console.error('failed: ', err));*/
+   
+    simpleGit().listRemote(['--get-url'], (err, data) => {
+      if (!err) {
+         console.log('Remote url for repository at ');
+         console.log(data);
+          simpleGit()
+    .add([latestFileName])
+    .commit('first commit '+currentTime)
+    .removeRemote('origin')
+    .addRemote('origin',path)
+    .push('origin', 'main')
+    .then(() => {
+      console.log('finished')
+    })
+    .catch((err) => console.error('failed: ', err));
+      }
+   });
+
+  }
   /*const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(url);

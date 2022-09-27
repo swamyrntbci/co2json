@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MonitorsRoutingModule } from './monitors-routing.module';
 import { ListComponent } from './list/list.component';
-
+import { HttpClientModule } from '@angular/common/http';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @NgModule({
@@ -13,6 +13,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
   imports: [
     CommonModule,
     MonitorsRoutingModule,
+    HttpClientModule,
     TabsModule.forRoot()
   ]
 })

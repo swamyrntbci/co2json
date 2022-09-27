@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/api.service'
 
 @Component({
   selector: 'app-list',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListComponent implements OnInit {
 
-  constructor() { }
+  data:any;
+  constructor( private apiService: ApiService) { }
+
+  listjsondata()
+  {
+    this.apiService.getExternalUrl('https://raw.githubusercontent.com/swamyrntbci/co2json/main/calc-latest.json').subscribe( res => {
+      console.log('----res----', res)
+      this.data = res;
+    })
+  }
 
   ngOnInit(): void {
+    this.listjsondata();
   }
 
 }
